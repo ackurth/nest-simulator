@@ -376,6 +376,7 @@ extern const Name q_rr;
 extern const Name q_sfa;
 extern const Name q_stc;
 
+extern const Name r_inner;
 extern const Name radius;
 extern const Name rate;
 extern const Name rate_slope;

@@ -385,7 +385,8 @@ public:
     double minor_axis,
     double polar_axis,
     double azimuth_angle,
-    double polar_angle )
+    double polar_angle,
+    double r_inner = 0 )
     : center_( center )
     , major_axis_( major_axis )
     , minor_axis_( minor_axis )
@@ -399,18 +400,25 @@ public:
     , azimuth_sin_( std::sin( azimuth_angle_ * numerics::pi / 180. ) )
     , polar_cos_( std::cos( polar_angle_ * numerics::pi / 180. ) )
     , polar_sin_( std::sin( polar_angle_ * numerics::pi / 180. ) )
+    , r_inner_( r_inner )
   {
-    if ( major_axis_ <= 0 or minor_axis_ <= 0 or polar_axis_ <= 0 )
+    if ( major_axis_ <= 0 or minor_axis_ <= 0 or polar_axis_ <= 0 or r_inner < 0 )
     {
       throw BadProperty(
         "nest::EllipseMask<D>: "
-        "All axis > 0 required." );
+        "All axis > 0 and r_inner >= 0 required." );
     }
     if ( major_axis_ < minor_axis_ )
     {
       throw BadProperty(
         "nest::EllipseMask<D>: "
         "major_axis greater than minor_axis required." );
+    }
+    if ( minor_axis_ < r_inner_ )
+    {
+      throw BadProperty(
+        "nest::EllipseMask<D>: "
+        "minor_axis greater than r_inner required." );
     }
     if ( D == 2 and not( polar_angle_ == 0.0 ) )
     {
@@ -472,6 +480,7 @@ private:
   double polar_axis_;
   double azimuth_angle_;
   double polar_angle_;
+  double r_inner_;
 
   double x_scale_;
   double y_scale_;
@@ -942,6 +951,7 @@ EllipseMask< D >::EllipseMask( const DictionaryDatum& d )
 {
   major_axis_ = getValue< double >( d, names::major_axis );
   minor_axis_ = getValue< double >( d, names::minor_axis );
+  r_inner_ = getValue< double >( d, names::r_inner );
   if ( major_axis_ <= 0 or minor_axis_ <= 0 )
   {
     throw BadProperty(
@@ -953,6 +963,12 @@ EllipseMask< D >::EllipseMask( const DictionaryDatum& d )
     throw BadProperty(
       "nest::EllipseMask<D>: "
       "major_axis greater than minor_axis required." );
+  }
+  if ( minor_axis_ < r_inner_ )
+  {
+    throw BadProperty(
+      "nest::EllipseMask<D>: "
+      "r_inner smaller than minor_axis required." );
   }
 
   x_scale_ = 4.0 / ( major_axis_ * major_axis_ );

@@ -340,8 +340,10 @@ EllipseMask< 2 >::inside( const Position< 2 >& p ) const
   const double new_x = ( p[ 0 ] - center_[ 0 ] ) * azimuth_cos_ + ( p[ 1 ] - center_[ 1 ] ) * azimuth_sin_;
   const double new_y = ( p[ 0 ] - center_[ 0 ] ) * azimuth_sin_ - ( p[ 1 ] - center_[ 1 ] ) * azimuth_cos_;
 
-  return std::pow( new_x, 2 ) * x_scale_ + std::pow( new_y, 2 ) * y_scale_ <= 1;
-}
+  bool cond_ellipse = ( std::pow( new_x, 2 ) * x_scale_ + std::pow( new_y, 2 ) * y_scale_ <= 1 );
+  bool cond_circle = ( std::pow( new_x, 2 ) + std::pow( new_y, 2 )  >= std::pow( r_inner_, 2 ) );
+
+  return cond_circle && cond_ellipse;   }
 
 template <>
 bool

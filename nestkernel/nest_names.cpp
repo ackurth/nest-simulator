@@ -352,6 +352,7 @@ const Name q_rr( "q_rr" );
 const Name q_sfa( "q_sfa" );
 const Name q_stc( "q_stc" );
 
+const Name r_inner( "r_inner" );
 const Name radius( "radius" );
 const Name rate( "rate" );
 const Name rate_slope( "rate_slope" );
