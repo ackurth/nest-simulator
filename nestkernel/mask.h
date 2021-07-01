@@ -951,7 +951,6 @@ EllipseMask< D >::EllipseMask( const DictionaryDatum& d )
 {
   major_axis_ = getValue< double >( d, names::major_axis );
   minor_axis_ = getValue< double >( d, names::minor_axis );
-  r_inner_ = getValue< double >( d, names::r_inner );
   if ( major_axis_ <= 0 or minor_axis_ <= 0 )
   {
     throw BadProperty(
@@ -1011,6 +1010,15 @@ EllipseMask< D >::EllipseMask( const DictionaryDatum& d )
   else
   {
     azimuth_angle_ = 0.0;
+  }
+
+  if ( d->known( names::r_inner ) )
+  {
+    r_inner_ = getValue< double >( d, names::r_inner );
+  }
+  else
+  {
+    r_inner_ = 0.0;
   }
 
   if ( d->known( names::polar_angle ) )
