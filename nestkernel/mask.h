@@ -386,7 +386,7 @@ public:
     double polar_axis,
     double azimuth_angle,
     double polar_angle,
-    double r_inner = 0 )
+    double inner_radius )
     : center_( center )
     , major_axis_( major_axis )
     , minor_axis_( minor_axis )
@@ -400,13 +400,13 @@ public:
     , azimuth_sin_( std::sin( azimuth_angle_ * numerics::pi / 180. ) )
     , polar_cos_( std::cos( polar_angle_ * numerics::pi / 180. ) )
     , polar_sin_( std::sin( polar_angle_ * numerics::pi / 180. ) )
-    , r_inner_( r_inner )
+    , inner_radius_( inner_radius )
   {
-    if ( major_axis_ <= 0 or minor_axis_ <= 0 or polar_axis_ <= 0 or r_inner < 0 )
+    if ( major_axis_ <= 0 or minor_axis_ <= 0 or polar_axis_ <= 0 or inner_radius_ < 0 )
     {
       throw BadProperty(
         "nest::EllipseMask<D>: "
-        "All axis > 0 and r_inner >= 0 required." );
+        "All axis > 0 and inner_radius >= 0 required." );
     }
     if ( major_axis_ < minor_axis_ )
     {
@@ -414,11 +414,11 @@ public:
         "nest::EllipseMask<D>: "
         "major_axis greater than minor_axis required." );
     }
-    if ( minor_axis_ < r_inner_ )
+    if ( inner_radius_ < major_axis_ )
     {
       throw BadProperty(
         "nest::EllipseMask<D>: "
-        "minor_axis greater than r_inner required." );
+        "inner_radius greater than major_axis required." );
     }
     if ( D == 2 and not( polar_angle_ == 0.0 ) )
     {
@@ -480,7 +480,7 @@ private:
   double polar_axis_;
   double azimuth_angle_;
   double polar_angle_;
-  double r_inner_;
+  double inner_radius_;
 
   double x_scale_;
   double y_scale_;
@@ -963,11 +963,11 @@ EllipseMask< D >::EllipseMask( const DictionaryDatum& d )
       "nest::EllipseMask<D>: "
       "major_axis greater than minor_axis required." );
   }
-  if ( minor_axis_ < r_inner_ )
+  if ( minor_axis_ < inner_radius_ )
   {
     throw BadProperty(
       "nest::EllipseMask<D>: "
-      "r_inner smaller than minor_axis required." );
+      "inner_radius smaller than minor_axis required." );
   }
 
   x_scale_ = 4.0 / ( major_axis_ * major_axis_ );
@@ -1012,13 +1012,13 @@ EllipseMask< D >::EllipseMask( const DictionaryDatum& d )
     azimuth_angle_ = 0.0;
   }
 
-  if ( d->known( names::r_inner ) )
+  if ( d->known( names::inner_radius ) )
   {
-    r_inner_ = getValue< double >( d, names::r_inner );
+    inner_radius_ = getValue< double >( d, names::inner_radius );
   }
   else
   {
-    r_inner_ = 0.0;
+    inner_radius_ = 0.0;
   }
 
   if ( d->known( names::polar_angle ) )
