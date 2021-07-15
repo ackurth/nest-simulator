@@ -414,11 +414,11 @@ public:
         "nest::EllipseMask<D>: "
         "major_axis greater than minor_axis required." );
     }
-    if ( inner_radius_ < major_axis_ )
+    if ( 2 * inner_radius_ > major_axis_ )
     {
       throw BadProperty(
         "nest::EllipseMask<D>: "
-        "inner_radius greater than major_axis required." );
+        "2 * inner_radius smaller than major_axis required." );
     }
     if ( D == 2 and not( polar_angle_ == 0.0 ) )
     {
@@ -962,12 +962,6 @@ EllipseMask< D >::EllipseMask( const DictionaryDatum& d )
     throw BadProperty(
       "nest::EllipseMask<D>: "
       "major_axis greater than minor_axis required." );
-  }
-  if ( minor_axis_ < inner_radius_ )
-  {
-    throw BadProperty(
-      "nest::EllipseMask<D>: "
-      "inner_radius smaller than minor_axis required." );
   }
 
   x_scale_ = 4.0 / ( major_axis_ * major_axis_ );
