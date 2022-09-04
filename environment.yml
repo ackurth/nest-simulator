@@ -43,7 +43,8 @@ dependencies:
   - gsl >= 1.11
   - libtool
   - readline
-
+  - openmpi-mpicc
+  - openmpi-mpicxx
   # Testing NEST ------------
   - pytest
   - pytest-timeout
