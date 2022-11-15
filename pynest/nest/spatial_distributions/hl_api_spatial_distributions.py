@@ -85,7 +85,7 @@ def gaussian(x, mean=0.0, std=1.0):
     })
 
 
-def gaussian2D(x, y, mean_x=0.0, mean_y=0.0, std_x=1.0, std_y=1.0, rho=0.0):
+def gaussian2D(x, y, mean_x=0.0, mean_y=0.0, theta=0, gamma=1.0, std=1.0):
     """
     Applies a bivariate gaussian distribution on two Parameters, representing values in the x and y direction.
 
@@ -99,12 +99,12 @@ def gaussian2D(x, y, mean_x=0.0, mean_y=0.0, std_x=1.0, std_y=1.0, rho=0.0):
         Mean of the distribution in the x-direction. Default is 0.0.
     mean_y : float, optional
         Mean of the distribution in the y-direction. Default is 0.0.
-    std_x : float, optional
-        Standard deviation of the distribution in the x-direction. Default is 1.0.
-    std_y : float, optional
-        Standard deviation of the distribution in the y-direction. Default is 1.0.
-    rho : float, optional
-        Correlation of x and y. Default is 0.0
+    theta : float, optional
+        Orientation of profile in degree. Default is 0.0.
+    gamma : float, optional
+        Spatial aspect ratio. Controls ratio of major and minor axis. Default is 1.0.
+    std : float, optional
+        Standard deviation of distribution. Default is 1.0.
 
     Returns
     -------
@@ -116,9 +116,9 @@ def gaussian2D(x, y, mean_x=0.0, mean_y=0.0, std_x=1.0, std_y=1.0, rho=0.0):
         'y': y,
         'mean_x': mean_x,
         'mean_y': mean_y,
-        'std_x': std_x,
-        'std_y': std_y,
-        'rho': rho,
+        'theta': theta,
+        'gamma': gamma,
+        'std': std,
     })
 
 

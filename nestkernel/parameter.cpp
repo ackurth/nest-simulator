@@ -308,33 +308,16 @@ Gaussian2DParameter::Gaussian2DParameter( const DictionaryDatum& d )
   , py_( getValue< ParameterDatum >( d, "y" ) )
   , mean_x_( getValue< double >( d, "mean_x" ) )
   , mean_y_( getValue< double >( d, "mean_y" ) )
-  , x_term_const_( 1.
-      / ( 2. * ( 1. - getValue< double >( d, "rho" ) * getValue< double >( d, "rho" ) )
-        * getValue< double >( d, "std_x" ) * getValue< double >( d, "std_x" ) ) )
-  , y_term_const_( 1.
-      / ( 2. * ( 1. - getValue< double >( d, "rho" ) * getValue< double >( d, "rho" ) )
-        * getValue< double >( d, "std_y" ) * getValue< double >( d, "std_y" ) ) )
-  , xy_term_const_( getValue< double >( d, "rho" )
-      / ( ( 1. - getValue< double >( d, "rho" ) * getValue< double >( d, "rho" ) ) * getValue< double >( d, "std_x" )
-        * getValue< double >( d, "std_y" ) ) )
+  , cos_( std::cos( getValue< double >( d, "theta") * numerics::pi / 180. ) )
+  , sin_( std::sin( getValue< double >( d, "theta") * numerics::pi / 180. ) )
+  , gamma_( getValue< double >( d, "gamma") )
+  , inv_two_std2_( 1.0 / ( 2 * getValue< double >( d, "std" ) * getValue< double >( d, "std" ) ) )
 {
-  const auto rho = getValue< double >( d, "rho" );
-  const auto std_x = getValue< double >( d, "std_x" );
-  const auto std_y = getValue< double >( d, "std_y" );
-  if ( rho >= 1 or rho <= -1 )
+  const auto std = getValue< double >( d, "std" );
+  if ( std <= 0 )
   {
     throw BadProperty(
-      "-1 < rho < 1 required for gaussian2d distribution parameter, got rho=" + std::to_string( rho ) );
-  }
-  if ( std_x <= 0 )
-  {
-    throw BadProperty(
-      "std_x > 0 required for gaussian2d distribution parameter, got std_x=" + std::to_string( std_x ) );
-  }
-  if ( std_y <= 0 )
-  {
-    throw BadProperty(
-      "std_y > 0 required for gaussian2d distribution parameter, got std_y=" + std::to_string( std_y ) );
+      "std > 0 required for gaussain2d distribution parameter, got std=" + std::to_string( std ) );
   }
 }
 
@@ -345,9 +328,13 @@ Gaussian2DParameter::value( RngPtr rng,
   const AbstractLayer& layer,
   Node* node )
 {
+
   const auto dx = px_->value( rng, source_pos, target_pos, layer, node ) - mean_x_;
   const auto dy = py_->value( rng, source_pos, target_pos, layer, node ) - mean_y_;
-  return std::exp( -dx * dx * x_term_const_ - dy * dy * y_term_const_ + dx * dy * xy_term_const_ );
+  const auto dx_prime = dx * cos_ + dy * sin_;
+  const auto dy_prime = - dx * sin_ + dy * cos_;
+
+  return std::exp( - gamma_ * gamma_ * dx_prime * dx_prime * inv_two_std2_ - dy_prime * dy_prime * inv_two_std2_  );
 }
 
 

@@ -1368,9 +1368,10 @@ public:
     , py_( p.py_ )
     , mean_x_( p.mean_x_ )
     , mean_y_( p.mean_y_ )
-    , x_term_const_( p.x_term_const_ )
-    , y_term_const_( p.y_term_const_ )
-    , xy_term_const_( p.xy_term_const_ )
+    , cos_( p.cos_ )
+    , sin_( p.sin_ )
+    , gamma_( p.gamma_ )
+    , inv_two_std2_( p.inv_two_std2_ )
   {
   }
 
@@ -1394,9 +1395,10 @@ protected:
   std::shared_ptr< Parameter > const py_;
   const double mean_x_;
   const double mean_y_;
-  const double x_term_const_;
-  const double y_term_const_;
-  const double xy_term_const_;
+  const double cos_;
+  const double sin_;
+  const double gamma_;
+  const double inv_two_std2_;
 };
 
 class GaborParameter : public Parameter
