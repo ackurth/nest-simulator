@@ -35,10 +35,10 @@ s_nodes = nest.Create('iaf_psc_alpha',
                                                   extent=[11., 11.]))
 # connectivity specifications with a mask
 conndict = {'rule': 'pairwise_bernoulli', 'p': 1.,
-            'mask': {'rectangular': {'lower_left' : [-1.0, -1.0],
+            'mask': {'rectangular': {'lower_left': [-1.0, -1.0],
                                      'upper_right': [1.0, 1.0]},
-                     'anchor': [3. , 3.]}
-           }
+                     'anchor': [3., 3.]}
+            }
 
 # get center element
 center_neuron = nest.FindCenterElement(s_nodes)
@@ -59,10 +59,10 @@ nest.PlotSources(s_nodes, center_neuron, fig=fig)
 plt.title('Source neurons of center neuron')
 plt.show()
 
-print('Global id of target neurons of center neuron')
+print('Target neurons of center neuron')
 print(nest.GetTargetNodes(center_neuron, s_nodes))
 
-print('Global id of source neurons of center neuron')
+print('Source neurons of center neuron')
 print(nest.GetSourceNodes(s_nodes, center_neuron))
 
 print('Positions of target neurons of center neuron')

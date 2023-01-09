@@ -139,7 +139,7 @@ def CreateMask(masktype, specs, anchor=None):
                 {'lower_left'  : [float, float, float],
                  'upper_right' : [float, float, float],
                  'azimuth_angle: float  # default: 0.0,
-                 'polar_angle  : float  # defualt: 0.0}
+                 'polar_angle  : float  # default: 0.0}
             #or
             'spherical' :
                 {'radius' : float}
@@ -662,7 +662,7 @@ def GetTargetNodes(sources, tgt_layer, syn_model=None):
 
     For each neuron in `sources`, this function finds all target elements
     in `tgt_layer`. If `syn_model` is not given (default), all targets are
-    returned, otherwise only targets of specific type.
+    returned, otherwise only targets connected via the given synapse model.
 
     Parameters
     ----------
@@ -733,11 +733,11 @@ def GetTargetNodes(sources, tgt_layer, syn_model=None):
 
 def GetSourceNodes(src_layer, targets, syn_model=None):
     """
-    Obtain sources of `targets` in given `source` population.
+    Obtain sources of `targets` in given `src_layer` population.
 
     For each neuron in `targets`, this function finds all target elements
     in `src_layer`. If `syn_model` is not given (default), all sources are
-    returned, otherwise only targets of specific type.
+    returned, otherwise only sources connected via the given synapse model.
 
     Parameters
     ----------
@@ -746,7 +746,7 @@ def GetSourceNodes(src_layer, targets, syn_model=None):
     targets : NodeCollection
         NodeCollection with node IDs of `targets`
     syn_model : [None | str], optional, default: None
-        Return only target positions for a given synapse model.
+        Return only source positions for a given synapse model.
 
     Returns
     -------
@@ -757,8 +757,7 @@ def GetSourceNodes(src_layer, targets, syn_model=None):
     See also
     --------
     GetSourcePositions: Obtain positions of sources in a given source layer connected to given target.
-    GetConnections: Return connection identifiers between
-        sources and targets
+    GetConnections: Return connection identifiers between sources and targets.
 
     Notes
     -----
@@ -776,7 +775,7 @@ def GetSourceNodes(src_layer, targets, syn_model=None):
 
             # connectivity specifications with a mask
             conndict = {'rule': 'pairwise_bernoulli', 'p': 1.,
-                        'mask': {'rectangular': {'lower_left' : [-2.0, -1.0],
+                        'mask': {'rectangular': {'lower_left': [-2.0, -1.0],
                                                  'upper_right': [2.0, 1.0]}}}
 
             # connect population s_nodes with itself according to the given
@@ -812,7 +811,7 @@ def GetTargetPositions(sources, tgt_layer, syn_model=None):
 
     For each neuron in `sources`, this function finds all target elements
     in `tgt_layer`. If `syn_model` is not given (default), all targets are
-    returned, otherwise only targets of specific type.
+    returned, otherwise only targets connected via the given syanpse model.
 
     Parameters
     ----------
@@ -894,7 +893,7 @@ def GetSourcePositions(src_layer, targets, syn_model=None):
 
     For each neuron in `targets`, this function finds all source elements
     in `src_layer`. If `syn_model` is not given (default), all targets are
-    returned, otherwise only source of specific type.
+    returned, otherwise only sources connected via the given synapse model.
 
     Parameters
     ----------
@@ -932,7 +931,7 @@ def GetSourcePositions(src_layer, targets, syn_model=None):
 
             # connectivity specifications with a mask
             conndict = {'rule': 'pairwise_bernoulli', 'p': 1.,
-                        'mask': {'rectangular': {'lower_left' : [-2.0, -1.0],
+                        'mask': {'rectangular': {'lower_left': [-2.0, -1.0],
                                                  'upper_right': [2.0, 1.0]}}}
 
             # connect population s_nodes with itself according to the given
@@ -1352,7 +1351,7 @@ def PlotSources(src_layer, tgt_nrn, syn_type=None, fig=None,
             # connectivity specifications with a mask
             conndict = {'rule': 'pairwise_bernoulli', 'p': 1.,
                         'use_on_source': True,
-                        'mask': {'rectangular': {'lower_left' : [-2.0, -1.0],
+                        'mask': {'rectangular': {'lower_left': [-2.0, -1.0],
                                                  'upper_right': [2.0, 1.0]}}}
 
             # connect population s_nodes with itself according to the given
@@ -1367,9 +1366,6 @@ def PlotSources(src_layer, tgt_nrn, syn_type=None, fig=None,
     # import pyplot here and not at toplevel to avoid preventing users
     # from changing matplotlib backend after importing nest
     import matplotlib.pyplot as plt
-
-    if not HAVE_MPL:
-        raise ImportError("Matplotlib could not be imported")
 
     if not isinstance(tgt_nrn, NodeCollection) or len(tgt_nrn) != 1:
         raise TypeError("tgt_nrn must be a single element NodeCollection.")

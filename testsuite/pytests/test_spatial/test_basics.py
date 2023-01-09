@@ -346,7 +346,7 @@ class BasicsTestCase(unittest.TestCase):
         self.assertEqual(t[0], nest.NodeCollection([1, 3, 7, 9]))
 
     def test_GetSourceNodes(self):
-        """Interface check for finding source."""
+        """Interface check for finding source"""
 
         cdict = {'rule': 'pairwise_bernoulli',
                  'p': 1.,
@@ -378,8 +378,7 @@ class BasicsTestCase(unittest.TestCase):
 
         s = nest.GetSourceNodes(layer, layer, syn_model='stdp_synapse')
         self.assertEqual(len(s), len(layer))
-        self.assertTrue(
-            all([len(g) == 4 for g in s]))  # 2x2 mask  -> four sources
+        self.assertTrue(all([len(g) == 4 for g in s]))  # 2x2 mask  -> four sources
 
         s = nest.GetSourceNodes(layer, layer[0])
         self.assertEqual(len(s), 1)
@@ -544,6 +543,15 @@ class BasicsTestCase(unittest.TestCase):
         for indx in range(len(p[0])):
             self.assertAlmostEqual(positions[indx][0], p[0][indx][0])
             self.assertAlmostEqual(positions[indx][1], p[0][indx][1])
+
+    def testSlicedPositions(self):
+        """Correct positions from spatial attribute of sliced NodeCollection"""
+        nest.ResetKernel()
+        positions = nest.spatial.free(nest.random.uniform(min=-1, max=1), num_dimensions=2)
+        nodes = nest.Create('iaf_psc_alpha', 10, positions=positions)
+        all_positions = sum([list(nodes[i].spatial['positions']) for i in range(len(nodes))], start=[])
+        self.assertEqual(tuple(all_positions), nodes.spatial['positions'])
+        self.assertEqual(tuple(nodes[::2].spatial['positions']), nodes.spatial['positions'][::2])
 
 
 def suite():
